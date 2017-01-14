@@ -1,0 +1,25 @@
+{
+  "name": "raspberrypi-tm1637-4display",
+  "version": "0.0.1",
+  "description": "TM1637 4-digit display demo  with wiring-pi",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thesadabc/raspberrypi-tm1637-4display.git"
+  },
+  "keywords": [
+    "raspberrypi",
+    "tm1637",
+    "4d-display"
+  ],
+  "author": "thesadabc",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thesadabc/raspberrypi-tm1637-4display/issues"
+  },
+  "homepage": "https://github.com/thesadabc/raspberrypi-tm1637-4display#readme",
+  "dependencies": {
+    "co": "^4.6.0",
+    "wiring-pi": "^2.2.1"
+  }
+}
