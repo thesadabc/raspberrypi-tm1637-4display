@@ -84,12 +84,12 @@ module.exports = class TM1637Display {
     readAck() {
         // 8号下降沿
         this.low(this.pinClk);
-        // wpi.pinMode(this.pinDIO, wpi.INPUT);
+        wpi.pinMode(this.pinDIO, wpi.INPUT);
         // 9号上升沿
         this.high(this.pinClk);
-        // const ack = wpi.digitalRead(this.pinDIO);
+        const ack = wpi.digitalRead(this.pinDIO);
         // if(ack === 0)  scucces, low
-        // wpi.pinMode(this.pinDIO, wpi.OUTPUT);
+        wpi.pinMode(this.pinDIO, wpi.OUTPUT);
         // 9号下降沿
         this.low(this.pinClk);
         // console.log(ack);
