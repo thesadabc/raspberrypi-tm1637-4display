@@ -133,17 +133,20 @@ module.exports = class TM1637Display {
         });
     }
 
-    sendData(nums) { // 
+    sendData(nums, split = false) {
         const self = this;
         return co(function*() {
+            let numsEncoded = [0, 0, 0, 0].map((u, i) => codigitToSegment[nums[i]] || 0);
+            if (split) numsEncoded[1] = numsEncoded[1] | 0b10000000; // the x of 2nd pos
+
             yield self.start(); // 数据命令设置
             yield self.writeByte(0b01000000); // 普通模式, 自动地址增加, 写数据到显示寄存器
             yield self.stop();
 
             yield self.start(); // 地址命令设置
-            yield self.writeByte(0b11000000 + (0b11 & (4 - nums.length))); // 地址起始位
-            for (let i = 0; i < nums.length; i++) {
-                yield self.writeByte(codigitToSegment[nums[i]] || 0);
+            yield self.writeByte(0b11000000); // 地址起始位 从0开始
+            for (let i = 0; i < numsEncoded.length; i++) {
+                yield self.writeByte(numsEncoded[i]);
             }
             yield self.stop();
 
@@ -153,7 +156,3 @@ module.exports = class TM1637Display {
         });
     }
 }
-
-
-
-

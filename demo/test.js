@@ -27,6 +27,6 @@ const g = [
 let count = 0;
 setInterval(function() {
     let arr = g[count % g.length];
-    t.sendData(arr);
+    t.sendData(arr, count % 2);
     count++;
 }, 1000);

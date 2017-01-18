@@ -69,7 +69,7 @@ module.exports = class TM1637Display {
     }
 
     read(pin) {
-        return new Promise(resolve => 
+        return new Promise(resolve =>
             this.q.push(["i", pin, resolve])
         );
     }
@@ -128,14 +128,17 @@ module.exports = class TM1637Display {
         this.high(this.pinDIO);
     }
 
-    sendData(nums) { // 
+    sendData(nums, split = false) {
+        let numsEncoded = [0, 0, 0, 0].map((u, i) => codigitToSegment[nums[i]] || 0);
+        if (split) numsEncoded[1] = numsEncoded[1] | 0b10000000; // the x of 2nd pos
+
         this.start(); // 数据命令设置
         this.writeByte(0b01000000); // 普通模式, 自动地址增加, 写数据到显示寄存器
         this.stop();
 
         this.start(); // 地址命令设置
-        this.writeByte(0b11000000 + (0b11 & (4 - nums.length))); // 地址起始位
-        nums.forEach(n => this.writeByte(codigitToSegment[n])); // 数据
+        this.writeByte(0b11000000); // 地址起始位 从0开始
+        numsEncoded.forEach(this.writeByte.bind(this)); // 数据
         this.stop();
 
         this.start(); // 显示控制
