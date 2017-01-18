@@ -47,17 +47,31 @@ module.exports = class TM1637Display {
         let q = this.q;
         (function loop() {
             let act = q.shift();
-            if (act) wpi.digitalWrite(act[0], act[1]);
+            if (act) {
+                if (act[0] === "o") {
+                    wpi.pinMode(act[1], wpi.OUTPUT);
+                    wpi.digitalWrite(act[1], act[2]);
+                } else if (act[0] === "i") {
+                    wpi.pinMode(act[1], wpi.INPUT);
+                    act[2](wpi.digitalRead(act[1]));
+                }
+            }
             setTimeout(loop, 1);
         })();
     }
 
     high(pin) {
-        this.q.push([pin, this.trueValue]);
+        this.q.push(["o", pin, this.trueValue]);
     }
 
     low(pin) {
-        this.q.push([pin, 1 - this.trueValue]);
+        this.q.push(["o", pin, 1 - this.trueValue]);
+    }
+
+    read(pin) {
+        return new Promise(resolve => 
+            this.q.push(["i", pin, resolve])
+        );
     }
 
     // clock high in, high out
@@ -73,10 +87,11 @@ module.exports = class TM1637Display {
         // 一个上升沿
         this.low(this.pinClk);
         // change the value when clock is low
-        if (value)
+        if (value) {
             this.high(this.pinDIO);
-        else
+        } else {
             this.low(this.pinDIO);
+        }
 
         this.high(this.pinClk);
     }
@@ -84,16 +99,15 @@ module.exports = class TM1637Display {
     readAck() {
         // 8号下降沿
         this.low(this.pinClk);
-        wpi.pinMode(this.pinDIO, wpi.INPUT);
+        const readPro = this.read(this.pinDIO);
+
         // 9号上升沿
         this.high(this.pinClk);
-        const ack = wpi.digitalRead(this.pinDIO);
-        // if(ack === 0)  scucces, low
-        wpi.pinMode(this.pinDIO, wpi.OUTPUT);
+
         // 9号下降沿
         this.low(this.pinClk);
-        // console.log(ack);
-        return ack;
+
+        return readPro;
     }
 
     // clock high in, low out
