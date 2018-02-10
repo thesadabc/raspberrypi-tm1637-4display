@@ -4,13 +4,10 @@ TM1637 4-digit display demo
 
 raspberry pi 3b+
 
+Node.js 8+
+
 ![image](assert/link2.JPG)
 
-
-由于信号需要持续一定时间才能被获取, js中不提供`sleep`的函数, 有两种代码实现类似功能
-
-1. 基于任务队列
-2. 基于`generator`异步的实现
 
 ## 说明
 

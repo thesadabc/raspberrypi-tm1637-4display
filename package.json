@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/thesadabc/raspberrypi-tm1637-4display#readme",
   "dependencies": {
-    "co": "^4.6.0",
     "wiring-pi": "^2.2.1"
   }
 }

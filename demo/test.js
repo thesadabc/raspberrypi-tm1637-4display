@@ -1,5 +1,4 @@
-const TM1637Display = require("../lib-with-queue");
-// const TM1637Display = require("../lib-with-generator");
+const TM1637Display = require("../");
 
 const Clk = 21;
 const DIO = 20;
